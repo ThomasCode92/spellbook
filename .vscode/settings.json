@@ -22,5 +22,22 @@
   "files.associations": { "*.css": "tailwindcss" },
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.inlayHints.parameterNames.enabled": "all",
-  "typescript.inlayHints.parameterTypes.enabled": true
+  "typescript.inlayHints.parameterTypes.enabled": true,
+
+  // Language Specific
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+
+  // SQL Tools - SQLite
+  "sqltools.useNodeRuntime": true,
+  "sqltools.autoOpenSessionFiles": false,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "spellbook",
+      "database": "prisma/dev.db"
+    }
+  ]
 }

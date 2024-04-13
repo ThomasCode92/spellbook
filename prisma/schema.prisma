@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Spellbook {
+  id          Int     @id @default(autoincrement())
+  title       String  @unique
+  description String?
+
+  spells Spell[]
+}
+
+model Spell {
+  id          Int     @id @default(autoincrement())
+  title       String  @unique
+  description String?
+  image       String?
+  spellbookId Int
+
+  spellbook Spellbook @relation(fields: [spellbookId], references: [id])
+}
