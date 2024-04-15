@@ -1,3 +1,15 @@
+'use client';
+
+import { trpc } from '@/server/client';
+
 export default function Home() {
-  return <div>Spellbook</div>;
+  const spellbooks = trpc.spellbooks.getSpellbooks.useQuery();
+
+  return (
+    <div>
+      {spellbooks.data?.map(spellbook => (
+        <div key={spellbook.title}>{spellbook.title}</div>
+      ))}
+    </div>
+  );
 }
