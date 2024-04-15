@@ -1,3 +1,5 @@
+import Provider from '@/components/Provider';
+
 import './globals.css';
 
 export const metadata = {
@@ -12,7 +14,9 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <Provider>
+        <body>{children}</body>
+      </Provider>
     </html>
   );
 }
