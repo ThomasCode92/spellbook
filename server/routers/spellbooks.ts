@@ -1,17 +1,33 @@
+import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
+
 import { procedure, router } from '../trpc';
 
-export const spellBooksRouter = router({
-  getSpellbooks: procedure.query(() => {
-    return [
-      { title: 'Spellbook 1', spells: [] },
-      { title: 'Spellbook 2', spells: [] },
-    ];
-  }),
-  addSpell: procedure.input(z.object({ title: z.string() })).mutation(opts => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { input } = opts;
+const prisma = new PrismaClient();
 
-    // TODO: call prisma add Spellbook method
+export const spellbooksRouter = router({
+  getSpellbooks: procedure.query(async () => {
+    return prisma.spellbook.findMany();
   }),
+  addSpell: procedure
+    .input(z.object({ title: z.string(), description: z.string() }))
+    .mutation(async opts => {
+      const { input } = opts;
+
+      await prisma.spellbook.create({
+        data: {
+          title: input.title,
+          description: input.description,
+        },
+      });
+    }),
+  deleteSpellbook: procedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async opts => {
+      const { input } = opts;
+
+      await prisma.spellbook.delete({
+        where: { id: input.id },
+      });
+    }),
 });
