@@ -1,25 +1,31 @@
+'use client';
+
+import { Fragment } from 'react';
+
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 
+import { trpc } from '@/server/client';
+
 export default function Spellbook() {
+  const spellbooks = trpc.spellbooks.getSpellbooks.useQuery();
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
-      </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
-    </Card>
+    <Fragment>
+      {spellbooks.data?.map(spellbook => (
+        <Card key={spellbook.id}>
+          <CardHeader>
+            <CardTitle>{spellbook.title}</CardTitle>
+            <CardDescription>{spellbook.description}</CardDescription>
+          </CardHeader>
+          <CardContent>Spells...</CardContent>
+        </Card>
+      ))}
+    </Fragment>
   );
 }
