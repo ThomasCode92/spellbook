@@ -4,6 +4,6 @@
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": ["spellbook", "spellbooks", "trpc"],
-  "ignoreWords": ["tailwindcss", "tanstack"],
+  "ignoreWords": ["tailwindcss", "tanstack", "clsx"],
   "import": []
 }

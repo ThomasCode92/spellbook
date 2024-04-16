@@ -1,9 +1,9 @@
-import { spellBooksRouter } from './routers/spellbooks';
+import { spellbooksRouter } from './routers/spellbooks';
 import { spellsRouter } from './routers/spells';
 import { router } from './trpc';
 
 export const appRouter = router({
-  spellbooks: spellBooksRouter,
+  spellbooks: spellbooksRouter,
   spells: spellsRouter,
 });
 

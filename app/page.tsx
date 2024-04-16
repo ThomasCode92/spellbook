@@ -1,15 +1,9 @@
-'use client';
-
-import { trpc } from '@/server/client';
+import Spellbook from '@/components/Spellbook/Spellbook';
 
 export default function Home() {
-  const spellbooks = trpc.spellbooks.getSpellbooks.useQuery();
-
   return (
-    <div>
-      {spellbooks.data?.map(spellbook => (
-        <div key={spellbook.title}>{spellbook.title}</div>
-      ))}
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <Spellbook />
+    </main>
   );
 }
