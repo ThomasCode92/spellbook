@@ -9,7 +9,7 @@ export const spellbooksRouter = router({
   getSpellbooks: procedure.query(async () => {
     return prisma.spellbook.findMany();
   }),
-  addSpell: procedure
+  addSpellbook: procedure
     .input(z.object({ title: z.string(), description: z.string() }))
     .mutation(async opts => {
       const { input } = opts;
