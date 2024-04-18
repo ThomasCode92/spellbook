@@ -9,6 +9,16 @@ export const spellbooksRouter = router({
   getSpellbooks: procedure.query(async () => {
     return prisma.spellbook.findMany();
   }),
+  getSpellbookById: procedure
+    .input(z.object({ id: z.number() }))
+    .query(async opts => {
+      const { input } = opts;
+
+      return prisma.spellbook.findFirst({
+        where: { id: input.id },
+        include: { spells: true },
+      });
+    }),
   addSpellbook: procedure
     .input(z.object({ title: z.string(), description: z.string() }))
     .mutation(async opts => {
