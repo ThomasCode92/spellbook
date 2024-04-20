@@ -37,3 +37,8 @@ next-env.d.ts
 
 # prisma - sqlite
 prisma/*.db*
+
+# images
+public/*.png
+public/*.jpg
+public/*.jpeg

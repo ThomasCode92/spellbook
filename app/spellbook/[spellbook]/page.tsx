@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Fragment, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -33,11 +33,38 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const spellbook = trpc.spellbooks.getSpellbookById.useQuery({
     id: Number(params.spellbook),
   });
 
-  function addNewSpell() {}
+  const addSpell = trpc.spells.addSpell.useMutation();
+
+  function addNewSpell() {
+    if (!spellbook.data) return;
+
+    let file: File | undefined;
+
+    if (fileRef.current?.files) {
+      const formData = new FormData();
+
+      file = fileRef.current.files[0];
+      formData.append('files', file);
+
+      fetch('/api/file', { method: 'POST', body: formData });
+    }
+
+    addSpell.mutate({
+      title,
+      description,
+      image: '',
+      spellbookId: spellbook.data.id,
+    });
+
+    setTitle('');
+    setDescription('');
+  }
 
   return (
     <Fragment>
@@ -62,6 +89,8 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
                 value={description}
                 onChange={event => setDescription(event.target.value)}
               />
+              <p>Image:</p>
+              <Input type="file" ref={fileRef} />
               <Button>Save</Button>
             </form>
           </DialogHeader>
