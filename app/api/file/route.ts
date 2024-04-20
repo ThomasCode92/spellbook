@@ -17,22 +17,21 @@ export async function POST(req: NextRequest) {
     }
 
     const file: File = files[0] as File; // Cast to File
+    const fileReader = file.stream().getReader();
+
     const filePath = `./public/${file.name}`;
     const fileStream = fs.createWriteStream(filePath);
 
-    file
-      .stream()
-      .getReader()
-      .read()
-      .then(result => {
-        fileStream.write(result.value);
-      });
+    // Manually handle the data chunks
+    let done = false;
+    while (!done) {
+      const { value, done: readerDone } = await fileReader.read();
 
-    // Wait for the stream to finish writing
-    await new Promise((resolve, reject) => {
-      fileStream.on('finish', resolve);
-      fileStream.on('error', reject);
-    });
+      if (value) {
+        fileStream.write(value);
+      }
+      done = readerDone;
+    }
 
     return NextResponse.json({
       message: 'File uploaded successfully',

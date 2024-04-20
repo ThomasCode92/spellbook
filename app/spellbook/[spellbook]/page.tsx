@@ -42,7 +42,7 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
   const addSpell = trpc.spells.addSpell.useMutation();
   const deleteSpell = trpc.spells.deleteSpell.useMutation();
 
-  function addNewSpell(event: FormEvent<HTMLFormElement>) {
+  async function addNewSpell(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!spellbook.data) return;
@@ -56,7 +56,7 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
       file = files[0];
       formData.append('files', file);
 
-      fetch('/api/file', { method: 'POST', body: formData });
+      await fetch('/api/file', { method: 'POST', body: formData });
     }
 
     addSpell.mutate(
@@ -91,7 +91,7 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
             </DialogDescription>
             <form
               className="flex flex-col gap-3"
-              onSubmit={event => addNewSpell(event)}
+              onSubmit={async event => await addNewSpell(event)}
             >
               <p>Title:</p>
               <Input
