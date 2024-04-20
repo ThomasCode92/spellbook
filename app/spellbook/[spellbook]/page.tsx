@@ -40,6 +40,7 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
   });
 
   const addSpell = trpc.spells.addSpell.useMutation();
+  const deleteSpell = trpc.spells.deleteSpell.useMutation();
 
   function addNewSpell() {
     if (!spellbook.data) return;
@@ -65,6 +66,10 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
     setTitle('');
     setDescription('');
   }
+
+  const deleteSpellById = (id: number) => {
+    deleteSpell.mutate({ id });
+  };
 
   return (
     <Fragment>
@@ -117,7 +122,9 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
                 )}
               </TableCell>
               <TableCell className="text-right">
-                <Button>Delete</Button>
+                <Button onClick={() => deleteSpellById(spell.id)}>
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}
