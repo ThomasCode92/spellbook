@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Fragment, useRef, useState } from 'react';
+import { FormEvent, Fragment, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -42,33 +42,39 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
   const addSpell = trpc.spells.addSpell.useMutation();
   const deleteSpell = trpc.spells.deleteSpell.useMutation();
 
-  function addNewSpell() {
+  function addNewSpell(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
     if (!spellbook.data) return;
 
+    const files = fileRef.current?.files;
     let file: File | undefined;
 
-    if (fileRef.current?.files) {
+    if (files && files.length > 0) {
       const formData = new FormData();
 
-      file = fileRef.current.files[0];
+      file = files[0];
       formData.append('files', file);
 
       fetch('/api/file', { method: 'POST', body: formData });
     }
 
-    addSpell.mutate({
-      title,
-      description,
-      image: '',
-      spellbookId: spellbook.data.id,
-    });
+    addSpell.mutate(
+      {
+        title,
+        description,
+        image: file ? `/public/${file.name}` : null,
+        spellbookId: spellbook.data.id,
+      },
+      { onSettled: spellbook.refetch },
+    );
 
     setTitle('');
     setDescription('');
   }
 
   const deleteSpellById = (id: number) => {
-    deleteSpell.mutate({ id });
+    deleteSpell.mutate({ id }, { onSettled: spellbook.refetch });
   };
 
   return (
@@ -83,7 +89,10 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
             <DialogDescription>
               Add a powerful spell to {spellbook.data?.title}.
             </DialogDescription>
-            <form className="flex flex-col gap-3" onSubmit={addNewSpell}>
+            <form
+              className="flex flex-col gap-3"
+              onSubmit={event => addNewSpell(event)}
+            >
               <p>Title:</p>
               <Input
                 value={title}

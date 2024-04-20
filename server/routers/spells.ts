@@ -14,7 +14,7 @@ export const spellsRouter = router({
       z.object({
         title: z.string(),
         description: z.string(),
-        image: z.string(),
+        image: z.string().nullable(),
         spellbookId: z.number(),
       }),
     )
