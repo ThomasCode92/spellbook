@@ -7,7 +7,9 @@ const prisma = new PrismaClient();
 
 export const spellbooksRouter = router({
   getSpellbooks: procedure.query(async () => {
-    return prisma.spellbook.findMany();
+    return prisma.spellbook.findMany({
+      include: { spells: true },
+    });
   }),
   getSpellbookById: procedure
     .input(z.object({ id: z.number() }))

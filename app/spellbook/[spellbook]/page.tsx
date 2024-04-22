@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/table';
 
 import { trpc } from '@/server/client';
+import Link from 'next/link';
 
 type SpellbookPageProps = {
   params: { spellbook: string };
@@ -83,6 +84,9 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
         <DialogTrigger asChild>
           <Button>Add spell</Button>
         </DialogTrigger>
+        <Button variant="outline" className="ml-4">
+          <Link href="/">Spellbooks</Link>
+        </Button>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create your spell</DialogTitle>

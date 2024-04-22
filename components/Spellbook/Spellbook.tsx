@@ -23,6 +23,7 @@ import { Input } from '@/components/ui/input';
 import plus from '@/icons/plus.svg';
 
 import { trpc } from '@/server/client';
+import Link from 'next/link';
 
 export default function Spellbook() {
   const [title, setTitle] = useState('');
@@ -41,13 +42,28 @@ export default function Spellbook() {
   return (
     <Fragment>
       {spellbooks.data?.map(spellbook => (
-        <Card key={spellbook.id}>
-          <CardHeader>
-            <CardTitle>{spellbook.title}</CardTitle>
-            <CardDescription>{spellbook.description}</CardDescription>
-          </CardHeader>
-          <CardContent>Spells...</CardContent>
-        </Card>
+        <Link key={spellbook.id} href={`/spellbook/${spellbook.id}`}>
+          <Card className="h-full">
+            <CardHeader>
+              <CardTitle>{spellbook.title}</CardTitle>
+              <CardDescription>{spellbook.description}</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-1">
+              {spellbook.spells.map(
+                spell =>
+                  spell.image && (
+                    <Image
+                      key={spell.id}
+                      src={spell.image}
+                      alt={`image of ${spell.title}`}
+                      width={30}
+                      height={30}
+                    />
+                  ),
+              )}
+            </CardContent>
+          </Card>
+        </Link>
       ))}
       <Dialog>
         <DialogTrigger asChild>
