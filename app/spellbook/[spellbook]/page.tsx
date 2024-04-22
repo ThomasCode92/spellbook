@@ -63,7 +63,7 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
       {
         title,
         description,
-        image: file ? `/public/${file.name}` : null,
+        image: file ? `/${file.name}` : null,
         spellbookId: spellbook.data.id,
       },
       { onSettled: spellbook.refetch },
@@ -127,7 +127,12 @@ export default function SpellbookPage({ params }: SpellbookPageProps) {
               <TableCell>{spell.description}</TableCell>
               <TableCell>
                 {spell.image && (
-                  <Image src={spell.image} alt={`image of ${spell.title}`} />
+                  <Image
+                    src={spell.image}
+                    alt={`image of ${spell.title}`}
+                    width={50}
+                    height={50}
+                  />
                 )}
               </TableCell>
               <TableCell className="text-right">
